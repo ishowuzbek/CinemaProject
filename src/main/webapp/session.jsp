@@ -1,5 +1,7 @@
 <%@ page import="org.example.cinemaproject.entity.Session" %>
 <%@ page import="java.util.List" %>
+<%@ page import="org.example.cinemaproject.repos.SeatRepo" %>
+<%@ page import="org.example.cinemaproject.entity.Seat" %>
 
 <html>
 <head>
@@ -59,6 +61,9 @@
                 String roomNumber = session1.getRoom().getRoomNumber().toString();
                 int price = session1.getPrice();
 
+                SeatRepo seatRepo = new SeatRepo();
+                List<Seat> soldSeats = seatRepo.findBySessionId(session1.getId());
+
                 if (!startTime.equals(currentStartTime)) {
     %>
     <div class="session-container">
@@ -69,7 +74,7 @@
         %>
 
         <div class="room-info">
-            <p>Room <%= roomNumber %> - Price: <%= price %> | Left: full</p>
+            <p>Room <%= roomNumber %> - Price: <%= price %> | Left: <%=30-soldSeats.size()%></p>
             <form action="booking.jsp">
                 <input type="hidden" name="movieId" value="<%=movieId%>">
                 <input type="hidden" name="startTime" value="<%=startTime%>">
